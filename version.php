@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'aiprovider_xai';
-$plugin->version = 2026110202;
+$plugin->version = 2026110203;
 $plugin->requires = 2025100600;
 $plugin->supported = [501, 503];
 $plugin->maturity = MATURITY_STABLE;

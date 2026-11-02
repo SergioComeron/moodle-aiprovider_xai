@@ -104,5 +104,10 @@ function xmldb_aiprovider_xai_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026110202, 'aiprovider', 'xai');
     }
 
+    if ($oldversion < 2026110203) {
+        // Completion tokens now include reasoning tokens. No stored data to rewrite.
+        upgrade_plugin_savepoint(true, 2026110203, 'aiprovider', 'xai');
+    }
+
     return true;
 }

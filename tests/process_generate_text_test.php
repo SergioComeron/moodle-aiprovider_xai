@@ -249,6 +249,61 @@ final class process_generate_text_test extends \advanced_testcase {
     }
 
     /**
+     * Reasoning tokens are billed as output and are not part of completion_tokens.
+     */
+    public function test_completion_tokens_include_reasoning_tokens(): void {
+        $processor = new process_generate_text($this->provider, $this->action);
+        $method = new \ReflectionMethod($processor, 'handle_api_success');
+
+        $result = $method->invoke($processor, $this->chat_completion_response(3, 416));
+        $this->assertEquals(419, $result['completiontokens']);
+
+        $result = $method->invoke($processor, $this->chat_completion_response(568, null));
+        $this->assertEquals(568, $result['completiontokens']);
+
+        $summarise = new process_summarise_text($this->provider, $this->action);
+        $result = $method->invoke($summarise, $this->chat_completion_response(3, 416));
+        $this->assertEquals(419, $result['completiontokens']);
+
+        $explain = new process_explain_text($this->provider, $this->action);
+        $result = $method->invoke($explain, $this->chat_completion_response(3, 416));
+        $this->assertEquals(419, $result['completiontokens']);
+    }
+
+    /**
+     * Minimal chat completion response.
+     *
+     * @param int $completiontokens Visible completion tokens.
+     * @param int|null $reasoningtokens Reasoning tokens, or null when the field is absent.
+     * @return Response
+     */
+    private function chat_completion_response(int $completiontokens, ?int $reasoningtokens): Response {
+        $usage = [
+            'prompt_tokens' => 1289,
+            'completion_tokens' => $completiontokens,
+            'total_tokens' => 1289 + $completiontokens + ($reasoningtokens ?? 0),
+        ];
+        if ($reasoningtokens !== null) {
+            $usage['completion_tokens_details'] = [
+                'reasoning_tokens' => $reasoningtokens,
+            ];
+        }
+        $body = [
+            'id' => 'chatcmpl-reasoning',
+            'model' => 'grok-4.7',
+            'choices' => [
+                [
+                    'message' => ['role' => 'assistant', 'content' => 'Hola'],
+                    'finish_reason' => 'stop',
+                ],
+            ],
+            'usage' => $usage,
+            'system_fingerprint' => 'fp_test',
+        ];
+        return new Response(200, ['Content-Type' => 'application/json'], json_encode($body));
+    }
+
+    /**
      * Test query_ai_api for a successful call.
      */
     public function test_query_ai_api_success(): void {

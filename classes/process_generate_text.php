@@ -93,8 +93,26 @@ class process_generate_text extends abstract_processor {
             // store these on the action table. Moodle 5.3 (MDL-89123) reads the
             // same keys from the response and writes them on ai_action_register.
             'prompttokens' => $bodyobj->usage->prompt_tokens,
-            'completiontokens' => $bodyobj->usage->completion_tokens,
+            // xAI bills reasoning tokens as output but leaves them out of completion_tokens.
+            'completiontokens' => $this->billed_completion_tokens($bodyobj->usage),
             'model' => $bodyobj->model ?? $this->get_model(),
         ];
+    }
+
+    /**
+     * Output tokens that xAI bills for this response.
+     *
+     * completion_tokens is the visible reply. Reasoning tokens are reported
+     * separately under completion_tokens_details.reasoning_tokens and are not
+     * included in completion_tokens. OpenAI's completion_tokens already includes
+     * reasoning, so the value stored here is the sum.
+     *
+     * @param \stdClass $usage Usage object from the chat completion.
+     * @return int
+     */
+    private function billed_completion_tokens(\stdClass $usage): int {
+        $details = $usage->completion_tokens_details ?? null;
+        $reasoningtokens = (int) ($details?->reasoning_tokens ?? 0);
+        return (int) $usage->completion_tokens + $reasoningtokens;
     }
 }

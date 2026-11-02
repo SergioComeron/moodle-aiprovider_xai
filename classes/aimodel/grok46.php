@@ -19,10 +19,9 @@ namespace aiprovider_xai\aimodel;
 /**
  * Grok 4.6 text model.
  *
- * Current model on docs.x.ai (checked 2 November 2026), with the same
- * short-context price as Grok 4.7. Predefined so a site can pin this id.
- * It is not the default: the docs recommend Grok 4.7 for chat.
- * Same accepted sampling settings as Grok 4.7.
+ * Current model on docs.x.ai (checked 2 November 2026). Selectable, not the
+ * default: text actions default to grok-4.5, which used fewer reasoning
+ * tokens on the same Moodle prompts. Same sampling settings as Grok 4.7.
  *
  * @package    aiprovider_xai
  * @copyright  2026

@@ -27,7 +27,7 @@ namespace aiprovider_xai;
  */
 class model_migration {
     /** @var string Current default for text actions. */
-    public const TEXT_DEFAULT = 'grok-4.7';
+    public const TEXT_DEFAULT = 'grok-4.5';
 
     /** @var string Current default for image actions. */
     public const IMAGE_DEFAULT = 'grok-imagine-image-2.0';

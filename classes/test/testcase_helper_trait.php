@@ -47,7 +47,7 @@ trait testcase_helper_trait {
             $model = 'grok-imagine-image-2.0';
             $endpoint = 'https://api.x.ai/v1/images/generations';
         } else {
-            $model = 'grok-4.7';
+            $model = \aiprovider_xai\model_migration::TEXT_DEFAULT;
             $endpoint = 'https://api.x.ai/v1/chat/completions';
         }
         $defaultactionconfig = [

@@ -132,7 +132,7 @@ final class process_generate_text_test extends \advanced_testcase {
         $request = $method->invoke($processor, 1);
         $body = (object) json_decode($request->getBody()->getContents());
 
-        $this->assertEquals('grok-4.7', $body->model);
+        $this->assertEquals('grok-4.5', $body->model);
     }
 
     /**
@@ -155,7 +155,7 @@ final class process_generate_text_test extends \advanced_testcase {
 
         $body = (object) json_decode($request->getBody()->getContents());
 
-        $this->assertEquals('grok-4.7', $body->model);
+        $this->assertEquals('grok-4.5', $body->model);
         $this->assertEquals('0.5', $body->temperature);
         $this->assertEquals('100', $body->max_completion_tokens);
 

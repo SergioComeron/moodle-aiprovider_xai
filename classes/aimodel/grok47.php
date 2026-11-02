@@ -23,9 +23,9 @@ use MoodleQuickForm;
  * Grok 4.7 text model.
  *
  * Flagship chat model on the xAI API (docs.x.ai, checked 2 November 2026).
- * Default for text actions. docs.x.ai recommends it for chat, and its
- * short-context price matches grok-4.6 and grok-4.5 ($2 / $6 per 1M tokens).
- * Cheaper ids that are still listed, such as grok-4.3, stay on the custom model field.
+ * Selectable, not the default: the same short prompts cost more here than on
+ * grok-4.5 because this model spends more reasoning tokens.
+ * grok-4.3 is not a preset; enter it in the custom model field.
  * Chat completions accept temperature, top_p and max_completion_tokens.
  * frequency_penalty and presence_penalty are not offered here: the API does not
  * support them on reasoning models, and Grok 4.7 is a reasoning model.

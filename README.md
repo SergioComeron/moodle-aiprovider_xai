@@ -8,14 +8,14 @@ Supported Moodle versions are **5.1, 5.2 and 5.3** only (`$plugin->requires = 20
 
 | Action | Endpoint | Notes |
 | --- | --- | --- |
-| Generate text | `POST https://api.x.ai/v1/chat/completions` | Default model `grok-4.7` |
+| Generate text | `POST https://api.x.ai/v1/chat/completions` | Default model `grok-4.5` |
 | Summarise text | same chat completion | Same processor as generate text. The action supplies the system instruction. |
 | Explain text | same chat completion | Same as summarise. Core OpenAI treats explain text this way in 5.3, and the class exists on 5.1 as well. |
 | Generate image | `POST https://api.x.ai/v1/images/generations` | Default model `grok-imagine-image-2.0`. Response format is `b64_json` because returned URLs are temporary. |
 
 Default system instructions are one short sentence each: plain text, and the same language as the input (the user's request for generate text). Explain asks for an explanation, not a summary. An instruction that still matches the core text, or the longer default this plugin shipped earlier, is replaced when the action runs and on upgrade. Text an admin has edited is left as saved.
 
-Removed preset ids `grok-4.3` and `grok-imagine-image-quality` are migrated to `grok-4.7` and `grok-imagine-image-2.0`. The settings form shows that new preset, not Custom. Any other custom id is left as entered.
+Removed preset ids `grok-4.3` and `grok-imagine-image-quality` are migrated to `grok-4.5` and `grok-imagine-image-2.0`. The settings form shows that new preset, not Custom. Any other custom id is left as entered. A site that already selected `grok-4.7` or `grok-4.6` keeps that id.
 
 Chat history, vision input, and image edits are out of scope.
 
@@ -31,11 +31,11 @@ Text (checked against [docs.x.ai](https://docs.x.ai/developers/models) on 2 Nove
 
 | Model id | Why it is predefined |
 | --- | --- |
-| `grok-4.7` | Flagship. Default for generate, summarise, and explain text. |
-| `grok-4.6` | Current model, same short-context price as 4.7. Predefined so a site can pin it. |
-| `grok-4.5` | Still served, same short-context price as 4.7, with cheaper cached input. Predefined so a site can pin it. |
+| `grok-4.5` | Default for generate, summarise, and explain text. |
+| `grok-4.7` | Flagship. Selectable. Real Moodle calls spent more reasoning tokens than 4.5. |
+| `grok-4.6` | Current model. Selectable, same sampling settings as 4.7. |
 
-The default is `grok-4.7`, not the cheapest id on the API. For prompts under 200k tokens, `grok-4.7`, `grok-4.6` and `grok-4.5` are all $2 / $6 per 1M input / output tokens, and docs.x.ai tells chat workloads to use Grok 4.7. Cheaper models that are still listed, including `grok-4.3` ($1.25 / $2.50) and `grok-build-0.1`, are not in the dropdown. Enter them in the custom model field. Older slugs retired on 15 May 2026 (`grok-3`, `grok-4-0709`, and the fast variants) redirect to `grok-4.3` and are not predefined.
+The default is `grok-4.5`. List prices for prompts under 200k tokens are the same $2 / $6 per 1M tokens on `grok-4.7`, `grok-4.6` and `grok-4.5`, but a real generate-text call cost about $0.0012 on 4.5 and about $0.0034 on 4.7 because 4.7 used more reasoning tokens. `grok-4.3` is not a preset. Enter it, or `grok-build-0.1`, in the custom model field. Older slugs retired on 15 May 2026 (`grok-3`, `grok-4-0709`, and the fast variants) redirect to `grok-4.3` and are not predefined.
 
 Image:
 

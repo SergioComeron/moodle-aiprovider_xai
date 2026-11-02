@@ -19,9 +19,9 @@ namespace aiprovider_xai\aimodel;
 /**
  * Grok 4.5 text model.
  *
- * Still served as of 2 November 2026 (docs.x.ai). Same short-context token
- * price as Grok 4.7, with a cheaper cached-input rate. Predefined so a site
- * can pin it. Same accepted sampling settings as Grok 4.7.
+ * Default for text actions. Listed token prices match Grok 4.6 and 4.7, but
+ * real Moodle calls spent fewer reasoning tokens, so a call cost about
+ * $0.0012 against about $0.0034 for Grok 4.7. Same sampling settings as 4.7.
  *
  * @package    aiprovider_xai
  * @copyright  2026

@@ -64,9 +64,9 @@ final class model_migration_test extends \advanced_testcase {
 
         $rewritten = model_migration::rewrite_actionconfig($actionconfig);
 
-        $this->assertSame('grok-4.7', $rewritten[$generate]['settings']['model']);
+        $this->assertSame('grok-4.5', $rewritten[$generate]['settings']['model']);
         $this->assertArrayNotHasKey('modelextraparams', $rewritten[$generate]['settings']);
-        $this->assertSame(['temperature' => 0.2], $rewritten[$generate]['modelsettings']['grok-4.7']);
+        $this->assertSame(['temperature' => 0.2], $rewritten[$generate]['modelsettings']['grok-4.5']);
         $this->assertArrayNotHasKey('grok-4.3', $rewritten[$generate]['modelsettings']);
 
         $this->assertSame('grok-imagine-image-2.0', $rewritten[$image]['settings']['model']);

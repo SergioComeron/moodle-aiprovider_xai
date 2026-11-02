@@ -184,7 +184,9 @@ class action_form extends action_settings_form {
         ) {
             $defaultmodel = 'custom';
         } else if (empty($this->actionconfig['model'])) {
-            $defaultmodel = ($actionname === 'generate_image') ? 'grok-imagine-image-2.0' : 'grok-4.7';
+            $defaultmodel = ($actionname === 'generate_image')
+                ? model_migration::IMAGE_DEFAULT
+                : model_migration::TEXT_DEFAULT;
         } else {
             $defaultmodel = $this->actionconfig['model'];
         }

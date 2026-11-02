@@ -152,7 +152,7 @@ final class action_form_test extends \advanced_testcase {
         $this->assertArrayNotHasKey('grok-4.3', $models);
 
         $defaults = provider::get_action_setting_defaults(\core_ai\aiactions\generate_text::class);
-        $this->assertSame('grok-4.7', $defaults['model']);
+        $this->assertSame('grok-4.5', $defaults['model']);
     }
 
     /**
@@ -195,12 +195,12 @@ final class action_form_test extends \advanced_testcase {
             ],
         ]);
         $defaults = $form->get_defaults();
-        $this->assertSame('grok-4.7', $defaults['model']);
+        $this->assertSame('grok-4.5', $defaults['model']);
 
         $mform = new \ReflectionProperty($form, '_form');
         $template = $mform->getValue($form)->getElementValue('modeltemplate');
         $template = is_array($template) ? $template[0] : $template;
-        $this->assertSame('grok-4.7', $template);
+        $this->assertSame('grok-4.5', $template);
     }
 
     /**

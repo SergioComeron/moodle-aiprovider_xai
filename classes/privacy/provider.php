@@ -28,7 +28,7 @@ use core_privacy\local\request\userlist;
  * The plugin stores no personal data. Prompts are sent to xAI and declared as external location metadata.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @codeCoverageIgnore
  */

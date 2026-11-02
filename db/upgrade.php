@@ -18,7 +18,7 @@
  * Upgrade steps for aiprovider_xai.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -105,6 +105,11 @@ function xmldb_aiprovider_xai_upgrade($oldversion) {
     if ($oldversion < 2026110203) {
         // Completion tokens now include reasoning tokens. No stored data to rewrite.
         upgrade_plugin_savepoint(true, 2026110203, 'aiprovider', 'xai');
+    }
+
+    if ($oldversion < 2026110204) {
+        // Marketplace metadata only. No stored data to rewrite.
+        upgrade_plugin_savepoint(true, 2026110204, 'aiprovider', 'xai');
     }
 
     return true;

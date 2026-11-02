@@ -1,0 +1,3 @@
+# Keep reviewer notes, the AMOS draft, and screenshots out of the
+# installable package produced by git archive (GitHub source ZIP).
+docs/ export-ignore

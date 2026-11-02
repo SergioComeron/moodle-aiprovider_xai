@@ -24,7 +24,7 @@ namespace aiprovider_xai\aimodel;
  * $0.0012 against about $0.0034 for Grok 4.7. Same sampling settings as 4.7.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grok45 extends grok47 {

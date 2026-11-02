@@ -22,7 +22,7 @@ namespace aiprovider_xai;
  * Kept so an upgrade can replace an unchanged copy. Edited text does not match.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class previous_system_instruction {

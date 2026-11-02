@@ -24,7 +24,7 @@ namespace aiprovider_xai\aimodel;
  * tokens on the same Moodle prompts. Same sampling settings as Grok 4.7.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grok46 extends grok47 {

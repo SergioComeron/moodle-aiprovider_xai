@@ -31,7 +31,7 @@ use MoodleQuickForm;
  * support them on reasoning models, and Grok 4.7 is a reasoning model.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grok47 extends base implements xai_base {

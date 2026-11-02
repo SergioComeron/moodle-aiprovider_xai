@@ -23,15 +23,22 @@ Installation is a normal plugin ZIP. There are no extra plugin dependencies and 
 - Documentation: https://github.com/SergioComeron/moodle-aiprovider_xai/blob/main/README.md
 - Tracker: https://github.com/SergioComeron/moodle-aiprovider_xai/issues
 
-## Screenshots to attach
+## Screenshots
 
-1. Site administration, AI providers, with an xAI instance in the list.
-2. The provider instance form, showing the API key field (key hidden).
-3. Generate text action settings, showing the model selector and system instruction.
-4. Generate image action settings, showing the image model and resolution.
-5. The text editor with the AI menu or button visible.
-6. The editor generate-text dialogue after a successful response, if a test key is available.
-7. The editor generate-image dialogue showing one returned image, if a test key is available.
+Captured on Moodle 5.3. The API key is masked. These files are in the git repository for the README and for this submission. `docs/` is marked `export-ignore`, so a plugin ZIP built with `git archive` does not install them.
+
+![AI providers list with an xAI instance](screenshots/2-ai-providers.png)
+
+![xAI provider instance and its actions](screenshots/1-xai-settings.png)
+
+![TinyMCE generate-text dialogue after a response](screenshots/3-tinymce-generate-text.png)
+
+Still useful to capture before upload, if you want them on the Marketplace record:
+
+1. Generate text action settings, showing the model selector and system instruction.
+2. Generate image action settings, showing the image model and resolution.
+3. The text editor toolbar with the AI button visible, before the dialogue opens.
+4. The editor generate-image dialogue showing one returned image.
 
 Do not include a readable API key in any screenshot.
 

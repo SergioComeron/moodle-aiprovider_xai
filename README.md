@@ -27,6 +27,16 @@ No extra plugins and no Composer step are required.
 
 Keep the key secret. Requests send it as `Authorization: Bearer <key>`. Usage is charged by xAI according to your account.
 
+## Screenshots
+
+Moodle 5.3. The API key in the settings form is masked.
+
+![AI providers list with an xAI instance](docs/screenshots/2-ai-providers.png)
+
+![xAI provider instance and its actions](docs/screenshots/1-xai-settings.png)
+
+![TinyMCE generate-text dialogue](docs/screenshots/3-tinymce-generate-text.png)
+
 ## Configuration
 
 Each provider instance has one required setting, the API key.

@@ -30,7 +30,8 @@ use Psr\Http\Message\ResponseInterface;
 class process_generate_text extends abstract_processor {
     #[\Override]
     protected function get_system_instruction(): string {
-        return $this->provider->actionconfig[$this->action::class]['settings']['systeminstruction'];
+        $stored = $this->provider->actionconfig[$this->action::class]['settings']['systeminstruction'] ?? '';
+        return system_instruction::normalise($this->action::class, $stored);
     }
 
     #[\Override]
@@ -88,6 +89,9 @@ class process_generate_text extends abstract_processor {
             'fingerprint' => $bodyobj->system_fingerprint,
             'generatedcontent' => $bodyobj->choices[0]->message->content,
             'finishreason' => $bodyobj->choices[0]->finish_reason,
+            // Kept on the response for both supported lines. Moodle 5.1 and 5.2
+            // store these on the action table. Moodle 5.3 (MDL-89123) reads the
+            // same keys from the response and writes them on ai_action_register.
             'prompttokens' => $bodyobj->usage->prompt_tokens,
             'completiontokens' => $bodyobj->usage->completion_tokens,
             'model' => $bodyobj->model ?? $this->get_model(),

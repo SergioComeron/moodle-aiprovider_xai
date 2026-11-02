@@ -26,6 +26,19 @@ $string['action:explain_text:endpoint'] = 'API endpoint';
 $string['action:explain_text:model'] = 'AI model';
 $string['action:explain_text:model_help'] = 'The model used to explain the provided text.';
 $string['action:explain_text:systeminstruction'] = 'System instruction';
+$string['action:explain_text:systeminstruction_default'] = 'You will receive a text input from the user. Your task is to explain the provided text. Follow these guidelines:
+ 1. Elaborate: Expand on key ideas and concepts, ensuring the explanation adds meaningful depth and avoids restating the text verbatim.
+ 2. Simplify: Break down complex terms or ideas into simpler components, making them easy to understand for a wide audience, including learners.
+ 3. Provide Context: Explain why something happens, how it works, or what its purpose is. Include relevant examples or analogies to enhance understanding where appropriate.
+ 4. Organise Logically: Structure your explanation to flow naturally, beginning with fundamental ideas before moving to finer details.
+
+Important Instructions:
+ 1. Return the explanation in plain text only.
+ 2. Do not include any markdown formatting, greetings, or platitudes.
+ 3. Focus on clarity, conciseness, and accessibility.
+ 4. Reply in the same language as the input text.
+
+Ensure the explanation is easy to read and effectively conveys the main points of the original text.';
 $string['action:explain_text:systeminstruction_help'] = 'This instruction is sent to the AI model along with the user\'s prompt. Editing this instruction is not recommended unless absolutely required.';
 $string['action:generate_image:endpoint'] = 'API endpoint';
 $string['action:generate_image:model'] = 'AI model';
@@ -34,11 +47,26 @@ $string['action:generate_text:endpoint'] = 'API endpoint';
 $string['action:generate_text:model'] = 'AI model';
 $string['action:generate_text:model_help'] = 'The model used to generate the text response.';
 $string['action:generate_text:systeminstruction'] = 'System instruction';
+$string['action:generate_text:systeminstruction_default'] = 'You will receive a text input from the user. Your task is to generate text based on their request. Follow these important instructions:
+ 1. Return the generated text in plain text only.
+ 2. Do not include any markdown formatting, greetings, or platitudes.
+ 3. Reply in the same language as the user\'s request.';
 $string['action:generate_text:systeminstruction_help'] = 'This instruction is sent to the AI model along with the user\'s prompt. Editing this instruction is not recommended unless absolutely required.';
 $string['action:summarise_text:endpoint'] = 'API endpoint';
 $string['action:summarise_text:model'] = 'AI model';
 $string['action:summarise_text:model_help'] = 'The model used to summarise the provided text.';
 $string['action:summarise_text:systeminstruction'] = 'System instruction';
+$string['action:summarise_text:systeminstruction_default'] = 'You will receive a text input from the user. Your task is to summarize the provided text. Follow these guidelines:
+ 1. Condense: Shorten long passages into key points.
+ 2. Simplify: Make complex information easier to understand, especially for learners.
+
+Important Instructions:
+ 1. Return the summary in plain text only.
+ 2. Do not include any markdown formatting, greetings, or platitudes.
+ 3. Focus on clarity, conciseness, and accessibility.
+ 4. Reply in the same language as the input text.
+
+Ensure the summary is easy to read and effectively conveys the main points of the original text.';
 $string['action:summarise_text:systeminstruction_help'] = 'This instruction is sent to the AI model along with the user\'s prompt. Editing this instruction is not recommended unless absolutely required.';
 $string['apikey'] = 'xAI API key';
 $string['apikey_help'] = 'Get a key from the <a href="https://console.x.ai/" target="_blank">xAI console</a>.';

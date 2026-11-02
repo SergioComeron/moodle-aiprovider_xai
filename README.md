@@ -11,6 +11,8 @@ Supported Moodle versions are **5.1, 5.2 and 5.3** only (`$plugin->requires = 20
 | Generate text | `POST https://api.x.ai/v1/chat/completions` | Default model `grok-4.7` |
 | Summarise text | same chat completion | Same processor as generate text. The action supplies the system instruction. |
 | Explain text | same chat completion | Same as summarise. Core OpenAI treats explain text this way in 5.3, and the class exists on 5.1 as well. |
+
+Default system instructions are plugin strings, not the core AI strings. Generate text asks for the generated text in plain text. Summarise and explain ask the model to reply in the same language as the input text. Generate text also asks for the language of the user's request. An instruction that still matches the unmodified core string is replaced when the action runs and when the plugin upgrades. Text an admin has edited is left as saved.
 | Generate image | `POST https://api.x.ai/v1/images/generations` | Default model `grok-imagine-image-2.0`. Response format is `b64_json` because returned URLs are temporary. |
 
 Chat history, vision input, and image edits are out of scope.
@@ -23,22 +25,24 @@ Each provider instance has one required setting: **API key** (`passwordunmask`).
 
 ## Predefined models
 
-Text (chosen from the models listed on [docs.x.ai](https://docs.x.ai/developers/models) in October 2026):
+Text (checked against [docs.x.ai](https://docs.x.ai/developers/models) on 2 November 2026):
 
 | Model id | Why it is predefined |
 | --- | --- |
-| `grok-4.7` | Current flagship. Default for generate, summarise, and explain text. |
-| `grok-4.5` | Previous flagship, still on the pricing page, so a site can pin it. |
-| `grok-4.3` | Lower token price and a 1M context window. Sensible choice for lighter text actions. |
+| `grok-4.7` | Flagship. Default for generate, summarise, and explain text. |
+| `grok-4.6` | Current model, same short-context price as 4.7. Predefined so a site can pin it. |
+| `grok-4.5` | Still served, same short-context price as 4.7, with cheaper cached input. Predefined so a site can pin it. |
 
-`grok-4.6` is also current and priced like 4.7. It is not a separate predefined class; use the custom model field for that id.
+The default is `grok-4.7`, not the cheapest id on the API. For prompts under 200k tokens, `grok-4.7`, `grok-4.6` and `grok-4.5` are all $2 / $6 per 1M input / output tokens, and docs.x.ai tells chat workloads to use Grok 4.7. Cheaper models that are still listed, including `grok-4.3` ($1.25 / $2.50) and `grok-build-0.1`, are not in the dropdown. Enter them in the custom model field. Older slugs retired on 15 May 2026 (`grok-3`, `grok-4-0709`, and the fast variants) redirect to `grok-4.3` and are not predefined.
 
 Image:
 
 | Model id | Why it is predefined |
 | --- | --- |
 | `grok-imagine-image-2.0` | Current Imagine image model. Default. Accepts `quality`. |
-| `grok-imagine-image` | Lower-priced Imagine model still on the pricing page. `quality` is documented only for 2.0, so this model omits it. |
+| `grok-imagine-image` | Imagine 1.0. Still served and lower priced. `quality` is documented only for 2.0, so this model omits it. |
+
+`grok-imagine-image-quality` was retired on 2 November 2026. Requests to that slug are served by `grok-imagine-image-2.0` with `quality` `low`. It is not a predefined option. `grok-imagine-image-pro` already follows that redirect.
 
 Every action also has a **custom** model option. Extra parameters are a JSON object, same as the OpenAI provider.
 
@@ -53,7 +57,7 @@ Moodle `generate_image` inputs mapped onto the xAI body:
 | Moodle input | xAI parameter | Mapping |
 | --- | --- | --- |
 | `prompttext` | `prompt` | Unchanged. |
-| `numimages` | `n` | Clamped to 1–10. The core response stores one draft file, so only `data[0]` is watermarked and returned. |
+| `numimages` | `n` | Ignored. Moodle stores one image, so the request always sends `n` = 1. |
 | `aspectratio` `square` | `aspect_ratio` | `1:1` |
 | `aspectratio` `landscape` | `aspect_ratio` | `16:9` |
 | `aspectratio` `portrait` | `aspect_ratio` | `9:16` |
@@ -79,6 +83,10 @@ PHPUnit covers the provider, generate text, summarise text, and generate image. 
 moodle-plugin-ci phpunit
 ```
 
-## 5.1 and 5.3
+## 5.1, 5.2 and 5.3
 
-The `aiprovider_openai` PHP classes are the same on `MOODLE_501_STABLE` and `MOODLE_503_STABLE`. This plugin uses that 5.3 layout, including `#[\Override]` and PHPUnit `CoversClass` attributes. Both are valid on Moodle 5.1: PHP 8.2 ignores `\Override`, and Moodle 5.1 ships PHPUnit 11, which accepts the attributes. The OpenAI text action form in 5.3 references an undefined `$actionconfig` when setting defaults; this plugin uses `$this->actionconfig`, which is what the image form in core already does.
+`$plugin->supported = [501, 503]` covers 5.1, 5.2 and 5.3. GitHub Actions runs the same suite on `MOODLE_501_STABLE` (PHP 8.2), `MOODLE_502_STABLE` (PHP 8.3) and `MOODLE_503_STABLE` (PHP 8.3).
+
+The provider contract this plugin uses (`core_ai\provider`, `process_base`, action settings forms, model hooks) is unchanged from 5.2 to 5.3. Compared with `MOODLE_503_STABLE` on 2 November 2026, the core AI change that touches a provider response is [MDL-89123](https://tracker.moodle.org/browse/MDL-89123): `prompttokens` and `completiontokens` move from the action child tables to `ai_action_register`, and `core_ai\manager::store_action_result()` reads them from the response. This plugin still returns both keys. On 5.1 and 5.2 the action `store()` method writes them; on 5.3 the manager does. [MDL-80893](https://tracker.moodle.org/browse/MDL-80893) adds `courseid` on the register inside core and does not change the provider API.
+
+The `aiprovider_openai` PHP classes are the same on `MOODLE_501_STABLE` and `MOODLE_503_STABLE`. This plugin uses that layout, including `#[\Override]` and PHPUnit `CoversClass` attributes. Both are valid on Moodle 5.1: PHP 8.2 ignores `\Override`, and Moodle 5.1 ships PHPUnit 11, which accepts the attributes. The OpenAI text action form in 5.3 references an undefined `$actionconfig` when setting defaults; this plugin uses `$this->actionconfig`, which is what the image form in core already does.

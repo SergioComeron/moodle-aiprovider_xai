@@ -233,8 +233,9 @@ class action_form extends action_settings_form {
     /**
      * Cast a value to its intended type.
      *
-     * When form values are submitted they come through as strings.
-     * We need to reassign the types for correct use with model requests.
+     * Form values are submitted as strings. Only numeric model settings are
+     * cast, so the JSON request sends numbers. String types, including
+     * PARAM_RAW, stay strings. floatval('1k') would become 1.
      *
      * @param string $value Value to cast
      * @param string $type Intended type
@@ -247,7 +248,6 @@ class action_form extends action_settings_form {
                 break;
 
             case PARAM_FLOAT:
-            case PARAM_RAW:
                 $castvalue = $value !== '' ? floatval($value) : null;
                 break;
 

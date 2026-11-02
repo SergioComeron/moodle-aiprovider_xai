@@ -19,7 +19,8 @@ namespace aiprovider_xai\aimodel;
 /**
  * grok-imagine-image model.
  *
- * Lower-priced Imagine model still listed on the xAI pricing page.
+ * Imagine 1.0. Still served and lower priced (docs.x.ai, checked 2 November 2026).
+ * The 2 November 2026 retirement of grok-imagine-image-quality does not apply here.
  * The quality parameter is documented only for grok-imagine-image-2.0, so this
  * model omits it. Aspect ratio, resolution and base64 output are unchanged.
  *

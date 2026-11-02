@@ -26,6 +26,19 @@ $string['action:explain_text:endpoint'] = 'Punto final de la API';
 $string['action:explain_text:model'] = 'Modelo de IA';
 $string['action:explain_text:model_help'] = 'El modelo utilizado para explicar el texto proporcionado.';
 $string['action:explain_text:systeminstruction'] = 'Instrucción del sistema';
+$string['action:explain_text:systeminstruction_default'] = 'Recibirás un texto del usuario. Tu tarea es explicar el texto proporcionado. Sigue estas pautas:
+ 1. Desarrolla: amplía las ideas y los conceptos clave, de modo que la explicación aporte profundidad y no repita el texto de forma literal.
+ 2. Simplifica: descompón los términos o las ideas complejas en partes más sencillas, para que resulten fáciles de entender para un público amplio, incluido el alumnado.
+ 3. Aporta contexto: explica por qué ocurre algo, cómo funciona o cuál es su propósito. Incluye ejemplos o analogías pertinentes cuando ayuden a comprenderlo.
+ 4. Organiza con lógica: estructura la explicación para que fluya con naturalidad, empezando por las ideas fundamentales y pasando después a los detalles.
+
+Instrucciones importantes:
+ 1. Devuelve únicamente la explicación, en texto plano.
+ 2. No incluyas formato markdown, saludos ni fórmulas de cortesía.
+ 3. Prioriza la claridad, la concisión y la accesibilidad.
+ 4. Responde en el mismo idioma que el texto de entrada.
+
+Asegúrate de que la explicación sea fácil de leer y transmita los puntos principales del texto original.';
 $string['action:explain_text:systeminstruction_help'] = 'Esta instrucción se envía al modelo de IA junto con la petición del usuario. No se recomienda editar esta instrucción salvo que sea absolutamente necesario.';
 $string['action:generate_image:endpoint'] = 'Punto final de la API';
 $string['action:generate_image:model'] = 'Modelo de IA';
@@ -34,11 +47,26 @@ $string['action:generate_text:endpoint'] = 'Punto final de la API';
 $string['action:generate_text:model'] = 'Modelo de IA';
 $string['action:generate_text:model_help'] = 'El modelo utilizado para generar la respuesta de texto.';
 $string['action:generate_text:systeminstruction'] = 'Instrucción del sistema';
+$string['action:generate_text:systeminstruction_default'] = 'Recibirás un texto del usuario. Tu tarea es generar texto a partir de su petición. Sigue estas instrucciones importantes:
+ 1. Devuelve únicamente el texto generado, en texto plano.
+ 2. No incluyas formato markdown, saludos ni fórmulas de cortesía.
+ 3. Responde en el mismo idioma que la petición del usuario.';
 $string['action:generate_text:systeminstruction_help'] = 'Esta instrucción se envía al modelo de IA junto con la petición del usuario. No se recomienda editar esta instrucción salvo que sea absolutamente necesario.';
 $string['action:summarise_text:endpoint'] = 'Punto final de la API';
 $string['action:summarise_text:model'] = 'Modelo de IA';
 $string['action:summarise_text:model_help'] = 'El modelo utilizado para resumir el texto proporcionado.';
 $string['action:summarise_text:systeminstruction'] = 'Instrucción del sistema';
+$string['action:summarise_text:systeminstruction_default'] = 'Recibirás un texto del usuario. Tu tarea es resumir el texto proporcionado. Sigue estas pautas:
+ 1. Condensa: reduce los pasajes largos a las ideas clave.
+ 2. Simplifica: haz que la información compleja sea más fácil de entender, especialmente para el alumnado.
+
+Instrucciones importantes:
+ 1. Devuelve el resumen únicamente en texto plano.
+ 2. No incluyas formato markdown, saludos ni fórmulas de cortesía.
+ 3. Prioriza la claridad, la concisión y la accesibilidad.
+ 4. Responde en el mismo idioma que el texto de entrada.
+
+Asegúrate de que el resumen sea fácil de leer y transmita los puntos principales del texto original.';
 $string['action:summarise_text:systeminstruction_help'] = 'Esta instrucción se envía al modelo de IA junto con la petición del usuario. No se recomienda editar esta instrucción salvo que sea absolutamente necesario.';
 $string['apikey'] = 'Clave de API de xAI';
 $string['apikey_help'] = 'Obtenga una clave en la <a href="https://console.x.ai/" target="_blank">consola de xAI</a>.';

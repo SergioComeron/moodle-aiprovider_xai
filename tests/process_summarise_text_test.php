@@ -89,7 +89,11 @@ final class process_summarise_text_test extends \advanced_testcase {
         $body = (object) json_decode($request->getBody()->getContents());
 
         $this->assertEquals('system', $body->messages[0]->role);
-        $this->assertEquals(get_string('action_summarise_text_instruction', 'core_ai'), $body->messages[0]->content);
+        $this->assertEquals(
+            system_instruction::for_action(\core_ai\aiactions\summarise_text::class),
+            $body->messages[0]->content,
+        );
+        $this->assertStringContainsString('same language as the input text', $body->messages[0]->content);
         $this->assertEquals('This is a test prompt', $body->messages[1]->content);
         $this->assertEquals('user', $body->messages[1]->role);
     }

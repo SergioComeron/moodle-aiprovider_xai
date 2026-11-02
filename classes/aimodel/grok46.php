@@ -17,24 +17,25 @@
 namespace aiprovider_xai\aimodel;
 
 /**
- * Grok 4.3 text model.
+ * Grok 4.6 text model.
  *
- * Lower token price and a 1M context window on the current xAI pricing page.
- * Suitable predefined choice for lighter text actions such as summarise.
- * Same accepted sampling settings as the other Grok 4 chat models.
+ * Current model on docs.x.ai (checked 2 November 2026), with the same
+ * short-context price as Grok 4.7. Predefined so a site can pin this id.
+ * It is not the default: the docs recommend Grok 4.7 for chat.
+ * Same accepted sampling settings as Grok 4.7.
  *
  * @package    aiprovider_xai
  * @copyright  2026
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class grok43 extends grok47 {
+class grok46 extends grok47 {
     #[\Override]
     public function get_model_name(): string {
-        return 'grok-4.3';
+        return 'grok-4.6';
     }
 
     #[\Override]
     public function get_model_display_name(): string {
-        return 'Grok 4.3';
+        return 'Grok 4.6';
     }
 }

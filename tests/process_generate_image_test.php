@@ -140,7 +140,9 @@ final class process_generate_image_test extends \advanced_testcase {
     }
 
     /**
-     * Test image count, landscape ratio, resolution and the model that omits quality.
+     * Test that numimages is ignored, plus landscape ratio, resolution and the model that omits quality.
+     *
+     * Moodle stores one image, so the request always sends n = 1 even when numimages is higher.
      */
     public function test_create_request_object_image_mapping(): void {
         $this->action = new \core_ai\aiactions\generate_image(
@@ -164,7 +166,7 @@ final class process_generate_image_test extends \advanced_testcase {
         $request = $method->invoke($processor, 1);
         $requestdata = (object) json_decode($request->getBody()->getContents());
 
-        $this->assertEquals(10, $requestdata->n);
+        $this->assertEquals(1, $requestdata->n);
         $this->assertEquals('low', $requestdata->quality);
         $this->assertEquals('16:9', $requestdata->aspect_ratio);
         $this->assertEquals('2k', $requestdata->resolution);
@@ -181,6 +183,7 @@ final class process_generate_image_test extends \advanced_testcase {
         $request = $method->invoke($processor, 1);
         $requestdata = (object) json_decode($request->getBody()->getContents());
         $this->assertEquals('grok-imagine-image', $requestdata->model);
+        $this->assertEquals(1, $requestdata->n);
         $this->assertObjectNotHasProperty('quality', $requestdata);
         $this->assertEquals('b64_json', $requestdata->response_format);
     }

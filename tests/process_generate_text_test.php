@@ -88,8 +88,32 @@ final class process_generate_text_test extends \advanced_testcase {
 
         $body = (object) json_decode($request->getBody()->getContents());
 
+        $this->assertEquals('system', $body->messages[0]->role);
+        $this->assertEquals(
+            system_instruction::for_action(\core_ai\aiactions\generate_text::class),
+            $body->messages[0]->content,
+        );
+        $this->assertStringNotContainsString('Return the summary', $body->messages[0]->content);
         $this->assertEquals('This is a test prompt', $body->messages[1]->content);
         $this->assertEquals('user', $body->messages[1]->role);
+    }
+
+    /**
+     * An edited system instruction is sent unchanged.
+     */
+    public function test_custom_system_instruction_is_preserved(): void {
+        $this->provider = $this->create_provider(
+            actionclass: \core_ai\aiactions\generate_text::class,
+            actionconfig: [
+                'systeminstruction' => 'Write a haiku.',
+            ],
+        );
+        $processor = new process_generate_text($this->provider, $this->action);
+        $method = new \ReflectionMethod($processor, 'create_request_object');
+        $request = $method->invoke($processor, 1);
+        $body = (object) json_decode($request->getBody()->getContents());
+
+        $this->assertEquals('Write a haiku.', $body->messages[0]->content);
     }
 
     /**

@@ -23,10 +23,13 @@ use MoodleQuickForm;
 /**
  * grok-imagine-image-2.0 image model.
  *
- * Current Imagine image model. Accepts aspect_ratio, resolution (1k or 2k)
- * and quality (low, medium, auto). This class maps Moodle's two quality values
- * onto low and medium. Resolution is a model setting because generate_image has
- * no resolution input; the API default when it is omitted is 1k.
+ * Current Imagine image model and the default (docs.x.ai, checked 2 November 2026).
+ * Accepts aspect_ratio, resolution (1k or 2k) and quality (low, medium, auto).
+ * This class maps Moodle's two quality values onto low and medium.
+ * grok-imagine-image-quality was retired on 2 November 2026 and is not offered;
+ * requests to that slug are served by this model at quality low.
+ * Resolution is a model setting because generate_image has no resolution input;
+ * the API default when it is omitted is 1k.
  *
  * @package    aiprovider_xai
  * @copyright  2026

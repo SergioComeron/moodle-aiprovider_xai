@@ -27,8 +27,8 @@ use Psr\Http\Message\ResponseInterface;
  *
  * Moodle generate_image inputs are mapped onto POST /v1/images/generations:
  * - prompttext -> prompt
- * - numimages -> n, clamped to 1..10 (the xAI limit). The core response object
- *   stores a single draft file, so only data[0] is kept.
+ * - numimages is ignored. The core response stores one draft file, so the
+ *   request always sends n = 1. Requesting more would be billed and discarded.
  * - aspectratio square|landscape|portrait -> aspect_ratio 1:1|16:9|9:16
  * - quality standard|hd -> quality low|medium on models that accept it.
  *   xAI has no "high". "auto" is not selected here; placements only offer the two Moodle values.
@@ -41,9 +41,6 @@ use Psr\Http\Message\ResponseInterface;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class process_generate_image extends abstract_processor {
-    /** @var int Maximum images accepted by the xAI generations API. */
-    private const MAX_IMAGES = 10;
-
     #[\Override]
     protected function query_ai_api(): array {
         $response = parent::query_ai_api();
@@ -59,25 +56,6 @@ class process_generate_image extends abstract_processor {
         }
 
         return $response;
-    }
-
-    /**
-     * Number of images to request.
-     *
-     * Moodle passes numimages. xAI accepts 1 to 10. Values outside that range are clamped.
-     * Only the first returned image is stored, because the core response has one draft file.
-     *
-     * @return int
-     */
-    private function get_number_of_images(): int {
-        $numberimages = (int) $this->action->get_configuration('numimages');
-        if ($numberimages < 1) {
-            $numberimages = 1;
-        }
-        if ($numberimages > self::MAX_IMAGES) {
-            $numberimages = self::MAX_IMAGES;
-        }
-        return $numberimages;
     }
 
     /**
@@ -156,7 +134,8 @@ class process_generate_image extends abstract_processor {
         $requestobj->model = $this->get_model();
         $requestobj->user = $userid;
         $requestobj->prompt = $this->action->get_configuration('prompttext');
-        $requestobj->n = $this->get_number_of_images();
+        // Moodle generate_image stores one image. Always request one.
+        $requestobj->n = 1;
         $requestobj->aspect_ratio = $this->calculate_aspect_ratio($this->action->get_configuration('aspectratio'));
 
         $quality = $this->calculate_quality($this->action->get_configuration('quality'));

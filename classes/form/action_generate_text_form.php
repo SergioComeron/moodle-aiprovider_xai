@@ -17,6 +17,7 @@
 namespace aiprovider_xai\form;
 
 use aiprovider_xai\aimodel\xai_base;
+use aiprovider_xai\system_instruction;
 
 /**
  * Generate text action provider settings form.
@@ -54,9 +55,16 @@ class action_generate_text_form extends action_form {
             'wrap="virtual" rows="5" cols="20"',
         );
         $mform->setType('systeminstruction', PARAM_TEXT);
+        if (array_key_exists('systeminstruction', $this->actionconfig)) {
+            // Swap an unmodified core instruction for the plugin default before the form displays it.
+            $this->actionconfig['systeminstruction'] = system_instruction::normalise(
+                $this->action,
+                (string) $this->actionconfig['systeminstruction'],
+            );
+        }
         $mform->setDefault(
             'systeminstruction',
-            $this->actionconfig['systeminstruction'] ?? $this->action::get_system_instruction(),
+            $this->actionconfig['systeminstruction'] ?? system_instruction::for_action($this->action),
         );
         $mform->addHelpButton('systeminstruction', "action:{$this->actionname}:systeminstruction", 'aiprovider_xai');
 

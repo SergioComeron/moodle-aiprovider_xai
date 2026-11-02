@@ -19,8 +19,9 @@ namespace aiprovider_xai\aimodel;
 /**
  * Grok 4.5 text model.
  *
- * Previous flagship still listed on the xAI pricing page. Same chat-completion
- * settings as Grok 4.7. Kept as a predefined choice so sites can pin it.
+ * Still served as of 2 November 2026 (docs.x.ai). Same short-context token
+ * price as Grok 4.7, with a cheaper cached-input rate. Predefined so a site
+ * can pin it. Same accepted sampling settings as Grok 4.7.
  *
  * @package    aiprovider_xai
  * @copyright  2026

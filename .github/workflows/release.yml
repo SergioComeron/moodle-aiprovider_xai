@@ -1,0 +1,75 @@
+name: Release
+
+# Pushing a tag vX.Y.Z builds the Moodle plugin ZIP and publishes a GitHub Release.
+# workflow_dispatch builds the same ZIP and uploads it as an artifact, with no release.
+# This workflow does not publish to the Moodle plugins directory and does not create tags.
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: Build plugin ZIP
+    runs-on: ubuntu-24.04
+    # actions:write is required to store the ZIP artifact (including the dry run).
+    permissions:
+      contents: read
+      actions: write
+    outputs:
+      zipname: ${{ steps.build.outputs.zipname }}
+      release: ${{ steps.build.outputs.release }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Build ZIP
+        id: build
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: python3 .github/release/build-zip.py
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: plugin-zip
+          path: ${{ steps.build.outputs.zipname }}
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    needs: package
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-24.04
+    # contents:write creates the GitHub Release. actions:read downloads the ZIP.
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Download plugin ZIP
+        uses: actions/download-artifact@v8
+        with:
+          name: plugin-zip
+          path: dist
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+          RELEASE: ${{ needs.package.outputs.release }}
+          ZIP_NAME: ${{ needs.package.outputs.zipname }}
+          ZIP_DIR: dist
+        run: bash .github/release/publish-release.sh

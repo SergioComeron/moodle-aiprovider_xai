@@ -20,7 +20,7 @@ namespace aiprovider_xai;
  * Tests for retired preset model migration.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\aiprovider_xai\model_migration::class)]

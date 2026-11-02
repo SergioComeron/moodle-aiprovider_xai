@@ -32,7 +32,7 @@ use MoodleQuickForm;
  * the API default when it is omitted is 1k.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grokimagineimage2 extends base implements xai_base, xai_image_base {

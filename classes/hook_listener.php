@@ -23,7 +23,7 @@ use core_ai\hook\after_ai_provider_form_hook;
  * Hook listener for the xAI provider.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_listener {

@@ -25,7 +25,7 @@ namespace aiprovider_xai\aimodel;
  * model omits it. Aspect ratio, resolution and base64 output are unchanged.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grokimagineimage extends grokimagineimage2 {

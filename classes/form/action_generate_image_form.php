@@ -22,7 +22,7 @@ use aiprovider_xai\aimodel\xai_base;
  * Generate image action provider settings form.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class action_generate_image_form extends action_form {

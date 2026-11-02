@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignoreFile
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,12 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component aiprovider_xai, language 'es'.
+ * Spanish string draft for AMOS.
+ *
+ * This file is not a Moodle language pack. It lives under docs/translations
+ * so it is not installed from lang/es. Submit it to lang.moodle.org after
+ * the plugin is approved. Do not move it to lang/es.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
 
 $string['action:explain_text:endpoint'] = 'Punto final de la API';
 $string['action:explain_text:model'] = 'Modelo de IA';
@@ -58,7 +64,7 @@ Los modelos de razonamiento de Grok no aceptan frequency_penalty ni presence_pen
 $string['invalidjson'] = 'Cadena JSON no válida';
 $string['pluginname'] = 'Proveedor de API de xAI';
 $string['privacy:metadata'] = 'El complemento proveedor de API de xAI no almacena ningún dato personal.';
-$string['privacy:metadata:aiprovider_xai:externalpurpose'] = 'Esta información se envía a la API de xAI para que se genere una respuesta. Los ajustes de su cuenta de xAI pueden cambiar cómo xAI almacena y conserva estos datos. Este complemento no envía datos de usuario de forma explícita a xAI ni los almacena en Moodle LMS.';
+$string['privacy:metadata:aiprovider_xai:externalpurpose'] = 'Esta información se envía a la API de xAI para que se genere una respuesta. Los ajustes de su cuenta de xAI pueden cambiar cómo xAI almacena y conserva estos datos. Este complemento no envía datos de usuario de forma explícita a xAI ni los almacena en Moodle LMS. Política de privacidad de xAI: https://x.ai/legal/privacy-policy';
 $string['privacy:metadata:aiprovider_xai:model'] = 'El modelo utilizado para generar la respuesta.';
 $string['privacy:metadata:aiprovider_xai:numberimages'] = 'Al generar imágenes, el número de imágenes utilizado en la respuesta.';
 $string['privacy:metadata:aiprovider_xai:prompttext'] = 'El texto de la petición introducido por el usuario y utilizado para generar la respuesta.';

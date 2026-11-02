@@ -18,7 +18,7 @@
  * Strings for component aiprovider_xai, language 'en'.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -58,7 +58,7 @@ Grok reasoning models do not accept frequency_penalty or presence_penalty. max_t
 $string['invalidjson'] = 'Invalid JSON string';
 $string['pluginname'] = 'xAI API provider';
 $string['privacy:metadata'] = 'The xAI API provider plugin does not store any personal data.';
-$string['privacy:metadata:aiprovider_xai:externalpurpose'] = 'This information is sent to the xAI API in order for a response to be generated. Your xAI account settings may change how xAI stores and retains this data. No user data is explicitly sent to xAI or stored in Moodle LMS by this plugin.';
+$string['privacy:metadata:aiprovider_xai:externalpurpose'] = 'This information is sent to the xAI API in order for a response to be generated. Your xAI account settings may change how xAI stores and retains this data. No user data is explicitly sent to xAI or stored in Moodle LMS by this plugin. xAI privacy policy: https://x.ai/legal/privacy-policy';
 $string['privacy:metadata:aiprovider_xai:model'] = 'The model used to generate the response.';
 $string['privacy:metadata:aiprovider_xai:numberimages'] = 'When generating images the number of images used in the response.';
 $string['privacy:metadata:aiprovider_xai:prompttext'] = 'The user entered text prompt used to generate the response.';

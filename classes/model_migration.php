@@ -22,7 +22,7 @@ namespace aiprovider_xai;
  * Ids that were never a preset are left unchanged.
  *
  * @package    aiprovider_xai
- * @copyright  2026
+ * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class model_migration {

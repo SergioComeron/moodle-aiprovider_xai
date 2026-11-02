@@ -117,6 +117,25 @@ final class process_generate_text_test extends \advanced_testcase {
     }
 
     /**
+     * A removed preset model is sent as the current text default.
+     */
+    public function test_retired_model_is_replaced_on_the_request(): void {
+        $this->provider = $this->create_provider(
+            actionclass: \core_ai\aiactions\generate_text::class,
+            actionconfig: [
+                'model' => 'grok-4.3',
+                'systeminstruction' => 'Write a haiku.',
+            ],
+        );
+        $processor = new process_generate_text($this->provider, $this->action);
+        $method = new \ReflectionMethod($processor, 'create_request_object');
+        $request = $method->invoke($processor, 1);
+        $body = (object) json_decode($request->getBody()->getContents());
+
+        $this->assertEquals('grok-4.7', $body->model);
+    }
+
+    /**
      * Test create_request_object with extra model settings.
      */
     public function test_create_request_object_with_model_settings(): void {

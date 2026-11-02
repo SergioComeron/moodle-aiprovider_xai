@@ -11,9 +11,11 @@ Supported Moodle versions are **5.1, 5.2 and 5.3** only (`$plugin->requires = 20
 | Generate text | `POST https://api.x.ai/v1/chat/completions` | Default model `grok-4.7` |
 | Summarise text | same chat completion | Same processor as generate text. The action supplies the system instruction. |
 | Explain text | same chat completion | Same as summarise. Core OpenAI treats explain text this way in 5.3, and the class exists on 5.1 as well. |
-
-Default system instructions are plugin strings, not the core AI strings. Generate text asks for the generated text in plain text. Summarise and explain ask the model to reply in the same language as the input text. Generate text also asks for the language of the user's request. An instruction that still matches the unmodified core string is replaced when the action runs and when the plugin upgrades. Text an admin has edited is left as saved.
 | Generate image | `POST https://api.x.ai/v1/images/generations` | Default model `grok-imagine-image-2.0`. Response format is `b64_json` because returned URLs are temporary. |
+
+Default system instructions are one short sentence each: plain text, and the same language as the input (the user's request for generate text). Explain asks for an explanation, not a summary. An instruction that still matches the core text, or the longer default this plugin shipped earlier, is replaced when the action runs and on upgrade. Text an admin has edited is left as saved.
+
+Removed preset ids `grok-4.3` and `grok-imagine-image-quality` are migrated to `grok-4.7` and `grok-imagine-image-2.0`. The settings form shows that new preset, not Custom. Any other custom id is left as entered.
 
 Chat history, vision input, and image edits are out of scope.
 

@@ -59,11 +59,45 @@ final class system_instruction_test extends \advanced_testcase {
 
         $this->assertStringContainsString('same language as the input text', $summarise);
         $this->assertStringContainsString('same language as the input text', $explain);
-        $this->assertStringContainsString('Return the explanation in plain text only.', $explain);
+        $this->assertStringContainsString('Return the explanation in plain text only', $explain);
         $this->assertStringNotContainsString('Return the summary', $explain);
 
         $coreexplain = \core_ai\aiactions\explain_text::get_system_instruction();
         $this->assertSame($explain, system_instruction::normalise(\core_ai\aiactions\explain_text::class, $coreexplain));
+    }
+
+    /**
+     * Defaults stay about as short as the core generate-text instruction.
+     */
+    public function test_defaults_stay_short(): void {
+        $actions = [
+            \core_ai\aiactions\generate_text::class,
+            \core_ai\aiactions\summarise_text::class,
+            \core_ai\aiactions\explain_text::class,
+        ];
+        foreach ($actions as $action) {
+            $instruction = system_instruction::for_action($action);
+            $this->assertLessThan(220, strlen($instruction), $action);
+            $this->assertStringNotContainsString('Elaborate', $instruction);
+            $this->assertStringNotContainsString('Condense', $instruction);
+        }
+    }
+
+    /**
+     * An unchanged long default from the previous release is replaced.
+     */
+    public function test_previous_long_default_is_replaced(): void {
+        $explain = \core_ai\aiactions\explain_text::class;
+        $long = previous_system_instruction::all()['en']['explain_text'];
+        $this->assertGreaterThan(800, strlen($long));
+        $this->assertSame(
+            system_instruction::for_action($explain),
+            system_instruction::normalise($explain, $long),
+        );
+        $this->assertSame(
+            'Keep this edited explanation instruction.',
+            system_instruction::normalise($explain, 'Keep this edited explanation instruction.'),
+        );
     }
 
     /**

@@ -56,5 +56,29 @@ function xmldb_aiprovider_xai_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026110200, 'aiprovider', 'xai');
     }
 
+    if ($oldversion < 2026110201) {
+        $records = $DB->get_records('ai_providers', ['provider' => 'aiprovider_xai\provider']);
+        foreach ($records as $record) {
+            if ($record->actionconfig === null || $record->actionconfig === '') {
+                continue;
+            }
+            $actionconfig = json_decode($record->actionconfig, true);
+            if (!is_array($actionconfig)) {
+                continue;
+            }
+            $updatedconfig = \aiprovider_xai\system_instruction::rewrite_actionconfig($actionconfig);
+            $updatedconfig = \aiprovider_xai\model_migration::rewrite_actionconfig($updatedconfig);
+            if ($updatedconfig === $actionconfig) {
+                continue;
+            }
+            $updated = new \stdClass();
+            $updated->id = $record->id;
+            $updated->actionconfig = json_encode($updatedconfig);
+            $DB->update_record('ai_providers', $updated);
+        }
+
+        upgrade_plugin_savepoint(true, 2026110201, 'aiprovider', 'xai');
+    }
+
     return true;
 }

@@ -17,6 +17,7 @@
 namespace aiprovider_xai\form;
 
 use aiprovider_xai\helper;
+use aiprovider_xai\model_migration;
 use core_ai\form\action_settings_form;
 
 /**
@@ -162,6 +163,18 @@ class action_form extends action_settings_form {
         $PAGE->requires->js_call_amd('aiprovider_xai/modelchooser', 'init');
         $mform = $this->_form;
         $actionname = $this->actionname;
+
+        // A removed preset is the new default, not a custom model id.
+        $storedmodel = $this->actionconfig['model'] ?? '';
+        if (is_string($storedmodel) && model_migration::is_retired($storedmodel)) {
+            $replacement = model_migration::replacement($actionname);
+            if (isset($this->storedmodelsettings[$storedmodel]) && !isset($this->storedmodelsettings[$replacement])) {
+                $this->storedmodelsettings[$replacement] = $this->storedmodelsettings[$storedmodel];
+            }
+            unset($this->storedmodelsettings[$storedmodel]);
+            $this->actionconfig['model'] = $replacement;
+            unset($this->actionconfig['modelextraparams']);
+        }
 
         // Determine which model to use as the default.
         if (

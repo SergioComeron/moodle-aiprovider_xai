@@ -186,6 +186,17 @@ final class process_generate_image_test extends \advanced_testcase {
         $this->assertEquals(1, $requestdata->n);
         $this->assertObjectNotHasProperty('quality', $requestdata);
         $this->assertEquals('b64_json', $requestdata->response_format);
+
+        $this->provider = $this->create_provider(
+            actionclass: \core_ai\aiactions\generate_image::class,
+            actionconfig: [
+                'model' => 'grok-imagine-image-quality',
+            ],
+        );
+        $processor = new process_generate_image($this->provider, $this->action);
+        $request = $method->invoke($processor, 1);
+        $requestdata = (object) json_decode($request->getBody()->getContents());
+        $this->assertEquals('grok-imagine-image-2.0', $requestdata->model);
     }
 
     /**

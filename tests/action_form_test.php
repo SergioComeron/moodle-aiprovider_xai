@@ -75,7 +75,7 @@ final class action_form_test extends \advanced_testcase {
             system_instruction::for_action(\core_ai\aiactions\generate_text::class),
             $generate['systeminstruction'],
         );
-        $this->assertStringContainsString('Return the generated text in plain text only.', $generate['systeminstruction']);
+        $this->assertStringContainsString('Return the generated text in plain text only', $generate['systeminstruction']);
         $this->assertStringNotContainsString('Return the summary', $generate['systeminstruction']);
         $this->assertStringContainsString('same language as the user\'s request', $generate['systeminstruction']);
 
@@ -83,14 +83,14 @@ final class action_form_test extends \advanced_testcase {
             system_instruction::for_action(\core_ai\aiactions\summarise_text::class),
             $summarise['systeminstruction'],
         );
-        $this->assertStringContainsString('Return the summary in plain text only.', $summarise['systeminstruction']);
+        $this->assertStringContainsString('Return the summary in plain text only', $summarise['systeminstruction']);
         $this->assertStringContainsString('same language as the input text', $summarise['systeminstruction']);
 
         $this->assertSame(
             system_instruction::for_action(\core_ai\aiactions\explain_text::class),
             $explain['systeminstruction'],
         );
-        $this->assertStringContainsString('Return the explanation in plain text only.', $explain['systeminstruction']);
+        $this->assertStringContainsString('Return the explanation in plain text only', $explain['systeminstruction']);
         $this->assertStringNotContainsString('Return the summary', $explain['systeminstruction']);
         $this->assertStringContainsString('same language as the input text', $explain['systeminstruction']);
     }
@@ -175,5 +175,54 @@ final class action_form_test extends \advanced_testcase {
 
         $defaults = provider::get_action_setting_defaults(\core_ai\aiactions\generate_image::class);
         $this->assertSame('grok-imagine-image-2.0', $defaults['model']);
+    }
+
+    /**
+     * A removed preset is shown as the new default, not as Custom.
+     */
+    public function test_retired_preset_is_not_shown_as_custom(): void {
+        $form = new form\action_generate_text_form(customdata: [
+            'actionname' => 'generate_text',
+            'action' => \core_ai\aiactions\generate_text::class,
+            'providername' => 'aiprovider_xai',
+            'actionconfig' => [
+                'settings' => [
+                    'model' => 'grok-4.3',
+                ],
+                'modelsettings' => [
+                    'grok-4.3' => ['temperature' => '0.4'],
+                ],
+            ],
+        ]);
+        $defaults = $form->get_defaults();
+        $this->assertSame('grok-4.7', $defaults['model']);
+
+        $mform = new \ReflectionProperty($form, '_form');
+        $template = $mform->getValue($form)->getElementValue('modeltemplate');
+        $template = is_array($template) ? $template[0] : $template;
+        $this->assertSame('grok-4.7', $template);
+    }
+
+    /**
+     * A custom model id stays on the custom field.
+     */
+    public function test_custom_model_id_is_kept(): void {
+        $form = new form\action_generate_text_form(customdata: [
+            'actionname' => 'generate_text',
+            'action' => \core_ai\aiactions\generate_text::class,
+            'providername' => 'aiprovider_xai',
+            'actionconfig' => [
+                'settings' => [
+                    'model' => 'grok-build-0.1',
+                ],
+            ],
+        ]);
+        $mform = new \ReflectionProperty($form, '_form');
+        $template = $mform->getValue($form)->getElementValue('modeltemplate');
+        $template = is_array($template) ? $template[0] : $template;
+        $custom = $mform->getValue($form)->getElementValue('custommodel');
+        $custom = is_array($custom) ? $custom[0] : $custom;
+        $this->assertSame('custom', $template);
+        $this->assertSame('grok-build-0.1', $custom);
     }
 }

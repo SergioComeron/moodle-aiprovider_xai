@@ -48,7 +48,8 @@ abstract class abstract_processor extends process_base {
      * @return string
      */
     protected function get_model(): string {
-        return $this->provider->actionconfig[$this->action::class]['settings']['model'];
+        $model = $this->provider->actionconfig[$this->action::class]['settings']['model'] ?? '';
+        return model_migration::migrate($this->action::get_basename(), $model);
     }
 
     /**

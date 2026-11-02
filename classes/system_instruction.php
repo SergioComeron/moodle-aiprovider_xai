@@ -22,8 +22,9 @@ use core_ai\aiactions\base;
  * Plugin system instructions for text actions.
  *
  * Core generate_text and explain_text tell the model to return "the summary".
- * This plugin stores its own defaults. An instruction that still matches the
- * unmodified core string is replaced; anything an admin has edited is kept.
+ * This plugin stores short defaults. An instruction that still matches the
+ * unmodified core string, or a long default this plugin used to ship, is
+ * replaced. Anything an admin has edited is kept.
  *
  * @package    aiprovider_xai
  * @copyright  2026
@@ -49,10 +50,11 @@ class system_instruction {
     }
 
     /**
-     * Replace an unmodified core instruction with the plugin default.
+     * Replace an unmodified default instruction with the current plugin default.
      *
      * An empty value is left empty so an admin can clear the instruction.
-     * Any other text that is not the core default is returned unchanged.
+     * Core defaults and the long defaults previously shipped by this plugin
+     * are replaced. Any other text is returned unchanged.
      *
      * @param string $actionclass Action class name.
      * @param string $stored Instruction saved on the provider.
@@ -62,10 +64,28 @@ class system_instruction {
         if ($stored === '') {
             return '';
         }
-        if (in_array($stored, self::core_defaults($actionclass), true)) {
+        $replace = array_merge(self::core_defaults($actionclass), self::previous_long_defaults($actionclass));
+        if (in_array($stored, $replace, true)) {
             return self::for_action($actionclass);
         }
         return $stored;
+    }
+
+    /**
+     * Long defaults this plugin shipped before they were shortened.
+     *
+     * @param string $actionclass Action class name.
+     * @return array
+     */
+    public static function previous_long_defaults(string $actionclass): array {
+        $actionname = substr($actionclass, (strrpos($actionclass, '\\') + 1));
+        $defaults = [];
+        foreach (previous_system_instruction::all() as $langstrings) {
+            if (isset($langstrings[$actionname]) && is_string($langstrings[$actionname])) {
+                $defaults[] = $langstrings[$actionname];
+            }
+        }
+        return $defaults;
     }
 
     /**

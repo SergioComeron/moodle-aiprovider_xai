@@ -74,6 +74,20 @@ That policy describes how xAI handles personal information. Data sent through th
 
 Bugs and feature requests: https://github.com/SergioComeron/moodle-aiprovider_xai/issues
 
+## Releasing
+
+GitHub Releases are built by `.github/workflows/release.yml`. The workflow does not publish the plugin to the Moodle plugins directory.
+
+1. In `version.php`, set `$plugin->release` to a three-part version such as `1.0.0`, and increase `$plugin->version` (`YYYYMMDDXX`) when the code changes. Leave `$plugin->maturity` as `MATURITY_STABLE` for a stable release.
+2. Commit and push that change to `main`.
+3. Tag that commit as `v` plus `$plugin->release`, then push the tag. Release `1.0.0` uses the tag `v1.0.0`.
+
+The workflow fails if the tag is not exactly `v` followed by `$plugin->release`. It builds `aiprovider_xai_<version>.zip`, where `<version>` is `$plugin->version`, with `git archive --prefix=xai/`. `.gitattributes` `export-ignore` drops `.git*`, `.github/`, `docs/`, `lang/es/`, `node_modules/`, `phpunit.xml`, and `*.dist` files. Tests and `lang/en` stay in the ZIP. The archive root is `xai/`, which Moodle installs into `ai/provider/xai`.
+
+Release notes are the section of `CHANGELOG.md` or `CHANGES.md` whose heading matches `$plugin->release`, when that section exists. Otherwise GitHub generates the notes from commits since the previous release.
+
+To build the ZIP without creating a release, run the workflow from the Actions tab. The ZIP is uploaded as an artifact only.
+
 ## Licence
 
 GNU GPL v3 or later. See [LICENSE](LICENSE).

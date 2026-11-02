@@ -1,3 +1,15 @@
-# Keep reviewer notes, the AMOS draft, and screenshots out of the
-# installable package produced by git archive (GitHub source ZIP).
+# Paths left out of the installable ZIP produced by git archive.
+# The release workflow builds that ZIP with --prefix=xai/, which Moodle
+# installs into ai/provider/xai. English strings ship; translations go to AMOS.
+# Tests stay in the package.
 docs/ export-ignore
+lang/es/ export-ignore
+.github/ export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+.git* export-ignore
+node_modules/ export-ignore
+phpunit.xml export-ignore
+phpunit.xml.dist export-ignore
+*.dist export-ignore
+*.dist.php export-ignore

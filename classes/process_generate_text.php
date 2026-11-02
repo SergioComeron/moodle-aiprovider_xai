@@ -93,7 +93,7 @@ class process_generate_text extends abstract_processor {
             // store these on the action table. Moodle 5.3 (MDL-89123) reads the
             // same keys from the response and writes them on ai_action_register.
             'prompttokens' => $bodyobj->usage->prompt_tokens,
-            // xAI bills reasoning tokens as output but leaves them out of completion_tokens.
+            // Reasoning tokens are billed as output but are omitted from completion_tokens.
             'completiontokens' => $this->billed_completion_tokens($bodyobj->usage),
             'model' => $bodyobj->model ?? $this->get_model(),
         ];

@@ -24,6 +24,7 @@ use core_ai\form\action_settings_form;
  * Base action settings form for the xAI provider.
  *
  * @package    aiprovider_xai
+ * @copyright  2025 Huong Nguyen <huongnv13@gmail.com>
  * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

@@ -25,6 +25,7 @@ use aiprovider_xai\system_instruction;
  * Also used for summarise_text and explain_text, which share the chat completion call.
  *
  * @package    aiprovider_xai
+ * @copyright  2024 Matt Porritt <matt.porritt@moodle.com>
  * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

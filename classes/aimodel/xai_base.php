@@ -20,6 +20,7 @@ namespace aiprovider_xai\aimodel;
  * xAI base AI model interface.
  *
  * @package    aiprovider_xai
+ * @copyright  2025 Huong Nguyen <huongnv13@gmail.com>
  * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

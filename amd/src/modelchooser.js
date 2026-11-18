@@ -17,6 +17,7 @@
  * AI provider model selection handler.
  *
  * @module     aiprovider_xai/modelchooser
+ * @copyright  2025 Huong Nguyen <huongnv13@gmail.com>
  * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

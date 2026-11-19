@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Attach the plugin ZIP to a GitHub Release for an existing tag.
-# Notes come from a CHANGELOG/CHANGES section for $plugin->release when
-# that section exists. Otherwise GitHub generates them from commits.
-# This script does not create tags and does not publish to the Moodle
-# plugins directory. --verify-tag aborts if the tag is not already on the remote.
+# Notes for a new release come from a CHANGES or CHANGELOG section whose
+# heading contains the tag (v plus $plugin->release) or $plugin->release.
+# Otherwise GitHub generates them from commits. When the release already
+# exists, the title and notes stay as they are and the ZIP asset is replaced.
+# This script does not create tags. The Marketplace upload is a separate step.
+# --verify-tag aborts if the tag is not already on the remote.
 
 set -euo pipefail
 
@@ -35,7 +37,9 @@ if source is None:
     sys.exit(2)
 
 heading = re.compile(r"^#{1,3}\s+")
-token = re.compile(r"(?<![0-9A-Za-z.])" + re.escape(release) + r"(?![0-9A-Za-z.-])")
+token = re.compile(
+    r"(?<![0-9A-Za-z.])v?" + re.escape(release) + r"(?![0-9A-Za-z.-])"
+)
 lines = pathlib.Path(source).read_text(encoding="utf-8").splitlines()
 start = None
 for index, line in enumerate(lines):
@@ -63,7 +67,7 @@ if [[ "$notes_status" -ne 0 && "$notes_status" -ne 2 ]]; then
 fi
 
 if gh release view "$TAG_NAME" --json tagName >/dev/null 2>&1; then
-  echo "Release ${TAG_NAME} already exists; uploading ${ZIP_NAME}."
+  echo "Release ${TAG_NAME} already exists; leaving it in place and replacing ${ZIP_NAME}."
   gh release upload "$TAG_NAME" "$zip_path" --clobber
   exit 0
 fi

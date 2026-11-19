@@ -1,14 +1,24 @@
 name: Release
 
-# Pushing a tag vX.Y.Z builds the Moodle plugin ZIP and publishes a GitHub Release.
-# workflow_dispatch builds the same ZIP and uploads it as an artifact, with no release.
-# This workflow does not publish to the Moodle plugins directory and does not create tags.
+# Pushing a tag vX.Y.Z builds the Moodle plugin ZIP, publishes a GitHub Release,
+# and submits that ZIP to the Moodle plugins directory.
+# workflow_dispatch requires an existing tag (for example v1.0.1). It builds
+# the ZIP from that tag and submits it to the Marketplace. Run it from the
+# branch that contains this workflow. When the GitHub Release already exists,
+# its title and notes stay as they are and the ZIP asset is replaced.
+# The repository secret MOODLE_MARKETPLACE_TOKEN is required. The workflow does
+# not create tags and does not print the token.
 
 on:
   push:
     tags:
       - 'v*.*.*'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to publish (for example v1.0.1)'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -17,24 +27,51 @@ jobs:
   package:
     name: Build plugin ZIP
     runs-on: ubuntu-24.04
-    # actions:write is required to store the ZIP artifact (including the dry run).
+    # actions:write stores the ZIP artifact.
     permissions:
       contents: read
       actions: write
     outputs:
       zipname: ${{ steps.build.outputs.zipname }}
       release: ${{ steps.build.outputs.release }}
+      tag: ${{ steps.tag.outputs.tag }}
     steps:
+      - name: Resolve release tag
+        id: tag
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            TAG="${INPUT_TAG}"
+          else
+            TAG="${REF_NAME}"
+          fi
+          TAG="${TAG//[[:space:]]/}"
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag '${TAG}' is not a release tag. Enter a tag such as v1.0.1."
+            exit 1
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "Releasing ${TAG}"
+
+      # The workflow file comes from the branch or tag that started the run.
+      # Full history makes git archive able to read an older tag on a manual run.
       - name: Check out repository
         uses: actions/checkout@v7
         with:
+          fetch-depth: 0
+          fetch-tags: true
           persist-credentials: false
 
       - name: Build ZIP
         id: build
         env:
-          EVENT_NAME: ${{ github.event_name }}
-          TAG_NAME: ${{ github.ref_name }}
+          TAG_NAME: ${{ steps.tag.outputs.tag }}
+          ARCHIVE_REF: ${{ steps.tag.outputs.tag }}
         run: python3 .github/release/build-zip.py
 
       - name: Upload ZIP artifact
@@ -47,9 +84,8 @@ jobs:
   release:
     name: Publish GitHub Release
     needs: package
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
-    # contents:write creates the GitHub Release. actions:read downloads the ZIP.
+    # contents:write creates or updates the GitHub Release. actions:read downloads the ZIP.
     permissions:
       contents: write
       actions: read
@@ -65,11 +101,39 @@ jobs:
           name: plugin-zip
           path: dist
 
-      - name: Create GitHub Release
+      - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG_NAME: ${{ github.ref_name }}
+          TAG_NAME: ${{ needs.package.outputs.tag }}
           RELEASE: ${{ needs.package.outputs.release }}
           ZIP_NAME: ${{ needs.package.outputs.zipname }}
           ZIP_DIR: dist
         run: bash .github/release/publish-release.sh
+
+  marketplace:
+    name: Publish to Moodle Marketplace
+    needs: [package, release]
+    runs-on: ubuntu-24.04
+    # contents:read checks out CHANGES.md. actions:read downloads the ZIP.
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Download plugin ZIP
+        uses: actions/download-artifact@v8
+        with:
+          name: plugin-zip
+          path: dist
+
+      - name: Publish to Moodle Marketplace
+        env:
+          MKPL_TOKEN: ${{ secrets.MOODLE_MARKETPLACE_TOKEN }}
+          TAG: ${{ needs.package.outputs.tag }}
+          ZIP_NAME: ${{ needs.package.outputs.zipname }}
+          ZIP_DIR: dist
+        run: bash .github/release/publish-marketplace.sh

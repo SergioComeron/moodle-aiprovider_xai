@@ -76,17 +76,22 @@ Bugs and feature requests: https://github.com/SergioComeron/moodle-aiprovider_xa
 
 ## Releasing
 
-GitHub Releases are built by `.github/workflows/release.yml`. The workflow does not publish the plugin to the Moodle plugins directory.
+`.github/workflows/release.yml` builds the plugin ZIP, publishes a GitHub Release, and submits that ZIP to the [Moodle plugins directory](https://marketplace.moodle.com/). Create the tag locally and push it. The workflow does not create tags.
 
-1. In `version.php`, set `$plugin->release` to a three-part version such as `1.0.0`, and increase `$plugin->version` (`YYYYMMDDXX`) when the code changes. Leave `$plugin->maturity` as `MATURITY_STABLE` for a stable release.
-2. Commit and push that change to `main`.
-3. Tag that commit as `v` plus `$plugin->release`, then push the tag. Release `1.0.0` uses the tag `v1.0.0`.
+Set the repository secret `MOODLE_MARKETPLACE_TOKEN` to a Moodle Marketplace API token. Create the token under Account settings → Security at <https://marketplace.moodle.com/account/security>, then add it in GitHub under Settings → Secrets and variables → Actions. The Marketplace step stops before the upload when that secret is missing, and the token is not written to the log.
 
-The workflow fails if the tag is not exactly `v` followed by `$plugin->release`. It builds `aiprovider_xai_<version>.zip`, where `<version>` is `$plugin->version`, with `git archive --prefix=xai/`. `.gitattributes` `export-ignore` drops `.git*`, `.github/`, `docs/`, `lang/es/`, `node_modules/`, `phpunit.xml`, and `*.dist` files. Tests and `lang/en` stay in the ZIP. The archive root is `xai/`, which Moodle installs into `ai/provider/xai`.
+1. In `version.php`, set `$plugin->release` to a three-part version such as `1.0.2`, and increase `$plugin->version` (`YYYYMMDDXX`) when the code changes. Leave `$plugin->maturity` as `MATURITY_STABLE` for a stable release.
+2. Add a section to `CHANGES.md` whose heading is exactly `## v` plus that release, for example `## v1.0.2`, and describe the release under it.
+3. Commit and push that change to `main`.
+4. Tag that commit as `v` plus `$plugin->release`, then push the tag. Release `1.0.2` uses the tag `v1.0.2`.
 
-Release notes are the section of `CHANGELOG.md` or `CHANGES.md` whose heading matches `$plugin->release`, when that section exists. Otherwise GitHub generates the notes from commits since the previous release.
+Pushing the tag runs the workflow. It fails when the tag is not exactly `v` followed by `$plugin->release` inside the built ZIP. It builds `aiprovider_xai_<version>.zip`, where `<version>` is `$plugin->version`, with `git archive --prefix=xai/`. `.gitattributes` `export-ignore` drops `.git*`, `.github/`, `docs/`, `lang/es/`, `node_modules/`, `phpunit.xml`, and `*.dist` files. Tests and `lang/en` stay in the ZIP. The archive root is `xai/`, which Moodle installs into `ai/provider/xai`.
 
-To build the ZIP without creating a release, run the workflow from the Actions tab. The ZIP is uploaded as an artifact only.
+The ZIP is attached to the GitHub Release for that tag. Notes for a new GitHub Release come from the `CHANGES.md` or `CHANGELOG.md` section whose heading contains the tag or `$plugin->release`. When that section is missing, GitHub generates the notes from commits since the previous release. When the GitHub Release already exists, the workflow leaves its title and notes unchanged and replaces the ZIP asset.
+
+The same ZIP is then posted to `https://marketplace.moodle.com/api/plugins/aiprovider_xai/versions`, with the GitHub repository URL, the tag, and release notes. Those notes are the body of the `CHANGES.md` section headed `##` plus the tag. When that section is missing, the notes are `Release` plus the tag. The directory must answer HTTP 201. Any validation errors in the response are printed and the workflow fails. The built ZIP is also stored as a workflow artifact.
+
+To publish a tag that already exists, such as `v1.0.1`, open the Release workflow from the Actions tab, choose the branch that contains this workflow (normally `main`), and enter that tag. The ZIP is built from the tag. Marketplace release notes are read from `CHANGES.md` on the branch you selected. An existing GitHub Release is left in place and its ZIP asset is replaced.
 
 ## Credits
 

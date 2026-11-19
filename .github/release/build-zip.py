@@ -2,8 +2,9 @@
 """Build the installable aiprovider_xai ZIP from the git tree.
 
 The archive root is xai/, via git archive --prefix. export-ignore rules in
-.gitattributes decide what is left out. On a tag push (EVENT_NAME=push) the
-tag must be v plus $plugin->release from version.php.
+.gitattributes decide what is left out. When TAG_NAME is set, that tag must
+be v plus $plugin->release in the built ZIP. ARCHIVE_REF selects the tree;
+it defaults to TAG_NAME, or to HEAD when no tag is set.
 """
 
 import os
@@ -95,10 +96,29 @@ def check_archive(path):
         print(name)
 
 
+def ensure_commit(ref):
+    """Exit if ref does not name a commit that git archive can read."""
+    if ref == "" or ref.startswith("-") or ":" in ref:
+        fail("Git ref " + ref + " cannot be archived")
+    result = subprocess.run(
+        ["git", "rev-parse", "--verify", "--quiet", ref + "^{commit}"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        fail("Git ref " + ref + " was not found. The tag must already exist.")
+
+
 def main():
     """Read version.php, optionally check the tag, and write the ZIP."""
     os.chdir(REPO)
-    archive_ref = os.environ.get("ARCHIVE_REF", "HEAD")
+    tag = os.environ.get("TAG_NAME", "")
+    archive_ref = os.environ.get("ARCHIVE_REF", "")
+    if archive_ref == "":
+        archive_ref = tag if tag else "HEAD"
+    if os.environ.get("GITHUB_ACTIONS") == "true" and tag == "":
+        fail("TAG_NAME is empty in GitHub Actions")
+    ensure_commit(archive_ref)
     text = subprocess.check_output(
         ["git", "show", archive_ref + ":version.php"],
         text=True,
@@ -112,11 +132,7 @@ def main():
     if re.search(r"[\s/\\]", release) or ".." in release:
         fail("$plugin->release cannot be used in a tag")
 
-    event = os.environ.get("EVENT_NAME", "workflow_dispatch")
-    tag = os.environ.get("TAG_NAME", "")
-    if event == "push":
-        if tag == "":
-            fail("TAG_NAME is empty on a tag push")
+    if tag:
         expected = "v" + release
         if tag != expected:
             fail(
@@ -148,6 +164,17 @@ def main():
         check=True,
     )
     check_archive(zip_path)
+    if tag:
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(Path(__file__).with_name("check-zip-release.py")),
+                str(zip_path),
+                tag,
+            ],
+        )
+        if result.returncode != 0:
+            sys.exit(result.returncode)
     print("Built " + str(zip_path))
 
     output = os.environ.get("GITHUB_OUTPUT")

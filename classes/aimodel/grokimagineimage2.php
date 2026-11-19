@@ -32,6 +32,7 @@ use MoodleQuickForm;
  * the API default when it is omitted is 1k.
  *
  * @package    aiprovider_xai
+ * @copyright  2025 Huong Nguyen <huongnv13@gmail.com>
  * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

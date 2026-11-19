@@ -23,6 +23,7 @@ namespace aiprovider_xai;
  * The action class supplies the system instruction.
  *
  * @package    aiprovider_xai
+ * @copyright  2024 David Woloszyn <david.woloszyn@moodle.com>
  * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

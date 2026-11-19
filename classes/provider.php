@@ -23,6 +23,7 @@ use Psr\Http\Message\RequestInterface;
  * Class provider.
  *
  * @package    aiprovider_xai
+ * @copyright  2024 Matt Porritt <matt.porritt@moodle.com>
  * @copyright  2026 Sergio Comerón <sergiocomeron@icloud.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

@@ -88,6 +88,20 @@ Release notes are the section of `CHANGELOG.md` or `CHANGES.md` whose heading ma
 
 To build the ZIP without creating a release, run the workflow from the Actions tab. The ZIP is uploaded as an artifact only.
 
+## Credits
+
+Parts of this plugin are adapted from Moodle core's OpenAI API provider, [`aiprovider_openai`](https://github.com/moodle/moodle/tree/MOODLE_503_STABLE/public/ai/provider/openai). The same files on `MOODLE_501_STABLE` and `MOODLE_502_STABLE` carry the same notices. Those notices are kept in the adapted files, next to the notice for this plugin.
+
+- Matt Porritt `<matt.porritt@moodle.com>` (2024): the processor, provider, privacy provider, action forms, hook listener, English language strings, and the PHPUnit tests taken from that provider.
+- Huong Nguyen `<huongnv13@gmail.com>` (2025 and 2026): the model chooser, model helper, model settings, and the shared testcase helper.
+- David Woloszyn `<david.woloszyn@moodle.com>` (2024): the explain-text processor.
+
+The community plugins [aiprovider_anthropic](https://github.com/LucaDR1998/moodle-aiprovider_anthropic) (Luca Demicheli Rubio; [Marketplace](https://marketplace.moodle.com/plugins/aiprovider_anthropic)) and [aiprovider_claude](https://github.com/ashishptl21/moodle-aiprovider_claude) (copyright in that repository: Treesha Infotech; [Marketplace](https://marketplace.moodle.com/plugins/aiprovider_claude), maintained by Ashish Patel and Raju Patel) were compared because they ship several of the same files. The copies here match `aiprovider_openai`. They do not include the Anthropic model-discovery code or the Claude messages API, so those plugins' own notices were not added.
+
+Written for xAI, and left with only this plugin's notice: the Grok model presets, the Imagine image request mapping, system-instruction normalisation, preset migration, the upgrade step, and the tests for those parts.
+
+`tests/fixtures/test.jpg` is the OpenAI provider's test image, unchanged. The JSON fixtures are that provider's fixtures with the model id, spacing, and an image MIME type adjusted. They are JSON, so they have no file docblock.
+
 ## Licence
 
 GNU GPL v3 or later. See [LICENSE](LICENSE).
